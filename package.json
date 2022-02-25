@@ -2,7 +2,7 @@
   "name": "demojockey",
   "displayName": "DemoJockey",
   "description": "",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "ptmfitch",
   "engines": {
     "vscode": "^1.64.0"
@@ -11,14 +11,19 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:demojockey.proofPoint"
+    "onCommand:demojockey.povProofExercise",
+    "onCommand:demojockey.tfwMicroDemo"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "demojockey.proofPoint",
-        "title": "Proof Point"
+        "command": "demojockey.povProofExercise",
+        "title": "DemoJockey: POV Proof Exercise"
+      },
+      {
+        "command": "demojockey.tfwMicroDemo",
+        "title": "DemoJockey: TFW Micro Demo"
       }
     ],
     "configuration": {
@@ -29,7 +34,7 @@
           "type": "string"
         },
         "demojockey.paths.tfw-micro-demos": {
-          "description": "Absolute path of local tfw-micro-demos repository",
+          "description": "Absolute path of local tfw-micro-demos repository. (Hint: Output of running pwd in the root directory of the repository.)",
           "type": "string"
         },
         "demojockey.overwrite": {
