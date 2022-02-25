@@ -2,7 +2,7 @@
   "name": "demojockey",
   "displayName": "DemoJockey",
   "description": "",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "publisher": "ptmfitch",
   "engines": {
     "vscode": "^1.64.0"
@@ -12,7 +12,8 @@
   ],
   "activationEvents": [
     "onCommand:demojockey.povProofExercise",
-    "onCommand:demojockey.tfwMicroDemo"
+    "onCommand:demojockey.tfwMicroDemo",
+    "onCommand:demojockey.atlasGooglePov"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -20,6 +21,10 @@
       {
         "command": "demojockey.povProofExercise",
         "title": "DemoJockey: POV Proof Exercise"
+      },
+      {
+        "command": "demojockey.atlasGooglePov",
+        "title": "DemoJockey: Atlas Google POV"
       },
       {
         "command": "demojockey.tfwMicroDemo",
@@ -31,6 +36,10 @@
       "properties": {
         "demojockey.paths.pov-proof-exercises": {
           "description": "Absolute path of local pov-proof-exercises repository. (Hint: Output of running pwd in the root directory of the repository.)",
+          "type": "string"
+        },
+        "demojockey.paths.atlas-google-pov": {
+          "description": "Absolute path of local atlas-google-pov repository. (Hint: Output of running pwd in the root directory of the repository.)",
           "type": "string"
         },
         "demojockey.paths.tfw-micro-demos": {
