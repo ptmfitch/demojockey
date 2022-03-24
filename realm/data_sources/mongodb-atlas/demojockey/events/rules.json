@@ -1,0 +1,15 @@
+{
+    "collection": "events",
+    "database": "demojockey",
+    "roles": [
+        {
+            "name": "insert-events",
+            "apply_when": {},
+            "write": true,
+            "insert": true,
+            "delete": false,
+            "search": false,
+            "additional_fields": {}
+        }
+    ]
+}
