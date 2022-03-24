@@ -6,6 +6,6 @@ exports = function({query, headers, body}, response) {
     
     console.log(reqBody)
 
-    context.services.get("mongodb-atlas").db("demo-jockey").collection("telemetry").insertOne(reqBody);
+    context.services.get("mongodb-atlas").db("demojockey").collection("events").insertOne(reqBody);
 
 };
