@@ -1,1 +1,6 @@
-[]
+[
+    {
+        "name": "postTelemetry",
+        "private": false
+    }
+]
