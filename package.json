@@ -2,7 +2,7 @@
   "name": "demojockey",
   "displayName": "DemoJockey",
   "description": "",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "ptmfitch",
   "engines": {
     "vscode": "^1.64.0"
@@ -13,22 +13,35 @@
   "activationEvents": [
     "onCommand:demojockey.povProofExercise",
     "onCommand:demojockey.tfwMicroDemo",
-    "onCommand:demojockey.atlasGooglePov"
+    "onCommand:demojockey.atlasGooglePov",
+    "onCommand:demojockey.createCluster"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "demojockey.povProofExercise",
-        "title": "DemoJockey: POV Proof Exercise"
+        "title": "MongoDB POV Proof Exercises",
+        "category": "DemoJockey",
+        "icon": "$(list-selection)"
       },
       {
         "command": "demojockey.atlasGooglePov",
-        "title": "DemoJockey: Atlas Google POV"
+        "title": "MongoDB Atlas Google POVs",
+        "category": "DemoJockey",
+        "icon": "$(list-selection)"
       },
       {
         "command": "demojockey.tfwMicroDemo",
-        "title": "DemoJockey: TFW Micro Demo"
+        "title": "MongoDB TFW Micro Demos",
+        "category": "DemoJockey",
+        "icon": "$(list-selection)"
+      },
+      {
+        "command": "demojockey.createCluster",
+        "title": "Create MongoDB Atlas Cluster",
+        "category": "DemoJockey",
+        "icon": "$(database)"
       }
     ],
     "configuration": {
@@ -50,6 +63,18 @@
           "description": "Whether to overwrite existing files when copying. (Default: false)",
           "type": "boolean",
           "default": false
+        },
+        "demojockey.atlas.project-id": {
+          "description": "See https://docs.atlas.mongodb.com/api/atlas-admin-api/#project-id",
+          "type": "string"
+        },
+        "demojockey.atlas.auth.public-key": {
+          "description": "Atlas Project API Public Key with Project Owner Permissions. See https://docs.atlas.mongodb.com/tutorial/configure-api-access/project/create-one-api-key/",
+          "type": "string"
+        },
+        "demojockey.atlas.auth.private-key": {
+          "description": "Atlas Project API Private Key with Project Owner Permissions. See https://docs.atlas.mongodb.com/tutorial/configure-api-access/project/create-one-api-key/",
+          "type": "string"
         }
       }
     }
@@ -79,5 +104,9 @@
     "glob": "^7.2.0",
     "mocha": "^9.1.3",
     "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "@mhoc/axios-digest-auth": "^0.8.0",
+    "axios": "^0.26.1"
   }
 }

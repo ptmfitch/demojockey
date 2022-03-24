@@ -6,3 +6,4 @@ node_modules
 src/pov-proof-exercises
 src/tfw-micro-demos
 .DS_Store
+secrets

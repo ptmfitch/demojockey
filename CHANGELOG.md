@@ -18,3 +18,10 @@
 ## [0.1.0]
 
 - Added Atlas Google POV command
+
+
+## [0.1.1]
+
+- Added MongoDB to command names
+- Added icons to commands
+- Added Create Cluster command

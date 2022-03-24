@@ -1,7 +1,0 @@
-Viv
-User file selection method, use file browser API?
-[ADDED] Proof names in selection drop down
-- Could use the version from the user's local README.md
-Add the Google Cloud POVs repo, nothing else apart from that jumps out
-[ADDED] Change the shortcut names to Demo Jockey: ...
-[ADDED] Have multiple commands, one per repo
