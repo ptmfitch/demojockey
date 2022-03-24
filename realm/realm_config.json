@@ -1,0 +1,8 @@
+{
+    "app_id": "demo-jockey-mwbfl",
+    "config_version": 20210101,
+    "name": "demo-jockey",
+    "location": "IE",
+    "deployment_model": "LOCAL",
+    "environment": "production"
+}
