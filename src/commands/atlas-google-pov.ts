@@ -1,11 +1,13 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as WorkspaceUtils from './utils/workspace-utils';
+// import * as Telemetry from './telemetry/realm-telemetry';
+import * as path from 'path';
 
 const repo = 'atlas-google-pov';
   
 const proofsDir = 'proofs';
-const proofsRepo = WorkspaceUtils.pathsConfig.get(repo, '');
+const proofsRepo = WorkspaceUtils.getPathsConfig().get(repo, '');
 const proofsPath = `${proofsRepo}/${proofsDir}`;
 
 const readmePath = `${proofsRepo}/README.md`;
@@ -46,22 +48,26 @@ export async function command() {
   }
   const proofsList = (await WorkspaceUtils.listDirs(proofsPath)).map(proofNo => gcpProofDirToFriendlyName(proofNo));
 
-  if (!vscode.workspace.workspaceFolders) {
-    vscode.window.showErrorMessage(WorkspaceUtils.workingFolderErrorMessage);
+  let targetPath;
+  try { 
+    targetPath = path.join(WorkspaceUtils.workspaceRootPath(), repo, proofsDir); 
+  } catch (e) {
+    WorkspaceUtils.logAndShowError((e as Error).message);
     return;
   }
-  const targetPath = `${vscode.workspace.workspaceFolders[0].uri.path}/${repo}/${proofsDir}`;
+
 
   const selectedProof = await vscode.window.showQuickPick(proofsList, {
     placeHolder: 'Select an Atlas Google POV',
   });
   if (!selectedProof) { return; }
   const selectedProofDir = friendlyNameToGcpProofDir(selectedProof);
-  const sourceProofDir: vscode.Uri = vscode.Uri.parse(`${proofsPath}/${selectedProofDir}`);
-  const targetProofDir: vscode.Uri = vscode.Uri.parse(`${targetPath}/${selectedProofDir}`);
+  const sourceProofDir: vscode.Uri = vscode.Uri.parse(path.join(proofsPath, selectedProofDir));
+  const targetProofDir: vscode.Uri = vscode.Uri.parse(path.join(targetPath, selectedProofDir));
 
-  WorkspaceUtils.copyDirThenOpenReadme(sourceProofDir, targetProofDir);
-
-  vscode.window.showInformationMessage(`Selected ${selectedProof}`);
+  if (await WorkspaceUtils.copyDirThenOpenReadme(sourceProofDir, targetProofDir)) {
+    // Telemetry.sendTelemetryEvent('atlas-google-pov', {demo: selectedProof});
+    vscode.window.showInformationMessage(`Selected ${selectedProof}`);
+  }
 
 }

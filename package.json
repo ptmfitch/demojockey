@@ -2,7 +2,7 @@
   "name": "demojockey",
   "displayName": "DemoJockey",
   "description": "",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "publisher": "ptmfitch",
   "engines": {
     "vscode": "^1.64.0"
@@ -14,7 +14,8 @@
     "onCommand:demojockey.povProofExercise",
     "onCommand:demojockey.tfwMicroDemo",
     "onCommand:demojockey.atlasGooglePov",
-    "onCommand:demojockey.createCluster"
+    "onCommand:demojockey.createCluster",
+    "onCommand:demojockey.cloneCluster"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -36,45 +37,27 @@
         "title": "MongoDB TFW Micro Demos",
         "category": "DemoJockey",
         "icon": "$(list-selection)"
-      },
-      {
-        "command": "demojockey.createCluster",
-        "title": "Create MongoDB Atlas Cluster",
-        "category": "DemoJockey",
-        "icon": "$(database)"
       }
     ],
     "configuration": {
       "title": "DemoJockey",
       "properties": {
         "demojockey.paths.pov-proof-exercises": {
-          "description": "Absolute path of local pov-proof-exercises repository. (Hint: Output of running pwd in the root directory of the repository.)",
+          "description": "Absolute path of local pov-proof-exercises repo (Hint: Run pwd in the root dir of repo)",
           "type": "string"
         },
         "demojockey.paths.atlas-google-pov": {
-          "description": "Absolute path of local atlas-google-pov repository. (Hint: Output of running pwd in the root directory of the repository.)",
+          "description": "Absolute path of local atlas-google-pov repo (Hint: Run pwd in the root dir of repo)",
           "type": "string"
         },
         "demojockey.paths.tfw-micro-demos": {
-          "description": "Absolute path of local tfw-micro-demos repository. (Hint: Output of running pwd in the root directory of the repository.)",
+          "description": "Absolute path of local tfw-micro-demos repo (Hint: Run pwd in the root dir of repo)",
           "type": "string"
         },
         "demojockey.overwrite": {
-          "description": "Whether to overwrite existing files when copying. (Default: false)",
+          "description": "Overwrite existing project files when copying",
           "type": "boolean",
           "default": false
-        },
-        "demojockey.atlas.project-id": {
-          "description": "See https://docs.atlas.mongodb.com/api/atlas-admin-api/#project-id",
-          "type": "string"
-        },
-        "demojockey.atlas.auth.public-key": {
-          "description": "Atlas Project API Public Key with Project Owner Permissions. See https://docs.atlas.mongodb.com/tutorial/configure-api-access/project/create-one-api-key/",
-          "type": "string"
-        },
-        "demojockey.atlas.auth.private-key": {
-          "description": "Atlas Project API Private Key with Project Owner Permissions. See https://docs.atlas.mongodb.com/tutorial/configure-api-access/project/create-one-api-key/",
-          "type": "string"
         }
       }
     }

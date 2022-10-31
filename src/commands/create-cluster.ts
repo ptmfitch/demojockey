@@ -1,52 +1,68 @@
-import * as vscode from 'vscode';
-import * as AtlasAdminAPI from './utils/atlas-admin-api';
-import * as AtlasAuth from './utils/atlas-auth';
+// import * as vscode from 'vscode';
+// import * as AtlasAdminAPI from './utils/atlas-admin-api';
+// import * as Workspace from './utils/workspace-utils';
+// import * as Telemetry from './telemetry/realm-telemetry';
 
-function validateClusterName(clusterName: string): string | undefined | null | Thenable<string|undefined|null> {
-  const invalidNameRegex = /[^A-z0-9\-]+/g;
-  return clusterName.match(invalidNameRegex) ? 
-    'Cluster names can only contain ASCII letters, numbers, and hyphens' :
-    null;
-}
+// export async function command() {
 
-export async function command() {
-    
-  const url = `https://cloud.mongodb.com/api/atlas/v1.0/groups/${AtlasAdminAPI.getProjectId()}/clusters`;
+//   console.log('Initiating create-cluster command');
 
-  const instanceSizeName = await vscode.window.showQuickPick(['M2', 'M5', 'M10', 'M20'], {
-    placeHolder: 'Select an instance size'
-  });
-  if (!instanceSizeName) { return; }
-  const providerName = await vscode.window.showQuickPick(['AWS', 'AZURE', 'GCP'], {
-    placeHolder: 'Select a provider'
-  });
-  if (!providerName) { return; }
-  const zoneName = await vscode.window.showQuickPick(AtlasAdminAPI.listZones(providerName, instanceSizeName), {
-    placeHolder: 'Select a region'
-  });
-  if (!zoneName) { return; }
-  const regionName = await vscode.window.showQuickPick(AtlasAdminAPI.listRegions(zoneName, providerName, instanceSizeName), {
-    placeHolder: 'Select a region'
-  });
-  if (!regionName) { return; }
-  const clusterName = await vscode.window.showInputBox({prompt: "Name your cluster", validateInput: validateClusterName});
-  if (!clusterName) { return; }
+//   const instanceSizeName = await vscode.window.showQuickPick(['M2', 'M5', 'M10', 'M20'], {
+//     placeHolder: 'Select an instance size'
+//   });
+//   if (!instanceSizeName) { 
+//     Workspace.logAndShowError('No instance size selected');
+//     return; 
+//   }
+//   console.log(`User selected instance size ${instanceSizeName}`);
 
-  const data = AtlasAdminAPI.clusterSettings(instanceSizeName, providerName, regionName);
+//   const providerName = await vscode.window.showQuickPick(['AWS', 'AZURE', 'GCP'], {
+//     placeHolder: 'Select a provider'
+//   });
+//   if (!providerName) { 
+//     Workspace.logAndShowError('No provider selected');
+//     return; 
+//   }
+//   console.log(`User selected provider ${providerName}`);
+
+//   const zoneName = await vscode.window.showQuickPick(AtlasAdminAPI.listZones(providerName, instanceSizeName), {
+//     placeHolder: 'Select a zone'
+//   });
+//   if (!zoneName) {
+//     Workspace.logAndShowError('No zone selected');
+//     return; 
+//   }
+//   console.log(`User selected zone ${zoneName}`);
+
+//   const regionName = await vscode.window.showQuickPick(AtlasAdminAPI.listRegions(zoneName, providerName, instanceSizeName), {
+//     placeHolder: 'Select a region'
+//   });
+//   if (!regionName) { 
+//     Workspace.logAndShowError('No region selected');
+//     return; 
+//   }
+//   console.log(`User selected region ${regionName}`);
+
+//   const clusterName = await AtlasAdminAPI.inputClusterName();
+//   if (!clusterName) { 
+//     Workspace.logAndShowError('No cluster name inputted');
+//     return; 
+//   }
+//   console.log(`User inputted cluster name ${clusterName}`);
+
+//   try {
+//     const connectionString = await AtlasAdminAPI.postCluster(instanceSizeName, providerName, regionName, clusterName);
+//     Workspace.createThenOpenConnectionString(clusterName, connectionString);
+//     Telemetry.sendTelemetryEvent("create-cluster", {
+//       instanceSize: instanceSizeName,
+//       provider: providerName,
+//       region: regionName
+//     });
+//   } catch (e) {
+//     Workspace.logAndShowError((e as Error).message);
+//     return;
+//   }
   
-  const response = await AtlasAuth.axios.request({
-    url: url,
-    method: 'POST',
-    data: data
-  }).then((response) => {
-    return response;
-  }, (error) => {
-    return error;
-  });
+//   console.log('Completed create-cluster command');
 
-  if (response.status >= 200 && response.status <= 300) {
-    vscode.window.showInformationMessage('Cluster created');
-  } else {
-    vscode.window.showErrorMessage(response.statusText);
-  }
-}
+// }

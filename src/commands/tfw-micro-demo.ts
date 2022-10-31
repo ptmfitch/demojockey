@@ -1,9 +1,11 @@
 import * as vscode from 'vscode';
 import * as WorkspaceUtils from './utils/workspace-utils';
+// import * as Telemetry from './telemetry/realm-telemetry';
+import * as path from 'path';
 
 const repo = 'tfw-micro-demos';
 
-const microDemoPath = WorkspaceUtils.pathsConfig.get(repo, '');
+const microDemoPath = WorkspaceUtils.getPathsConfig().get(repo, '');
 
 export async function command() {
 
@@ -13,21 +15,24 @@ export async function command() {
   }
   const microDemosList = WorkspaceUtils.listDirs(microDemoPath);
 
-  if (!vscode.workspace.workspaceFolders) {
-    vscode.window.showErrorMessage(WorkspaceUtils.workingFolderErrorMessage);
+  let targetPath;
+  try { 
+    targetPath = path.join(WorkspaceUtils.workspaceRootPath(), repo); 
+  } catch (e) {
+    WorkspaceUtils.logAndShowError((e as Error).message);
     return;
   }
-  const targetPath = `${vscode.workspace.workspaceFolders[0].uri.path}/${repo}`;
 
   const selectedMicroDemo = await vscode.window.showQuickPick(microDemosList, {
     placeHolder: 'Select a TFW Micro Demo',
   });
   if (!selectedMicroDemo) { return; }
-  const sourceProofDir: vscode.Uri = vscode.Uri.parse(`${microDemoPath}/${selectedMicroDemo}`);
-  const targetProofDir: vscode.Uri = vscode.Uri.parse(`${targetPath}/${selectedMicroDemo}`);
+  const sourceProofDir: vscode.Uri = vscode.Uri.parse(path.join(microDemoPath, selectedMicroDemo));
+  const targetProofDir: vscode.Uri = vscode.Uri.parse(path.join(targetPath, selectedMicroDemo));
 
-  WorkspaceUtils.copyDirThenOpenReadme(sourceProofDir, targetProofDir);
-
-  vscode.window.showInformationMessage(`Selected ${selectedMicroDemo}`);
-
+  if (await WorkspaceUtils.copyDirThenOpenReadme(sourceProofDir, targetProofDir)) {
+    // Telemetry.sendTelemetryEvent('tfw-micro-demo', {demo: selectedMicroDemo});
+    vscode.window.showInformationMessage(`Selected ${selectedMicroDemo}`);
+  }
+  
 }
