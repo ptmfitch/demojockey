@@ -35,3 +35,9 @@ Adds the 'POV Proof Exercise', 'Atlas Google POV' and 'TFW Micro Demo' commands 
 - Added configuration for local repository paths
 - Added error handling for common occurrences
 - Added informative messages to aid users
+
+### 0.1.3
+
+- Added MongoDB to command names
+- Added icons to commands
+- Fixed a bug preventing updating configuration without reloading window

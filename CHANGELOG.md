@@ -19,20 +19,9 @@
 
 - Added Atlas Google POV command
 
-
-## [0.1.1]
+## [0.1.3]
 
 - Added MongoDB to command names
 - Added icons to commands
-- Added Create Cluster command
-
-## [0.1.2]
-
-- Added custom naming to Create Cluster command
-- Added connection string creation to Create and Clone Cluster commands
-- Added anonymous user diagnostic and telemetry data collection
-
-## [0.1.3]
-
 - Removed telemetry and cluster creation, to be made into separate plugins
 - Fixed a bug preventing updating configuration without reloading window
