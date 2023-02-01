@@ -13,13 +13,27 @@ export async function listDirs(path: string, filter: Array<string> = ignoreFiles
     .filter(dir => !filter.includes(dir));
 }
 
-export function workspaceRootPath(): string {
+export function getWorkspaceRootPath(): string {
   const workspaceFolders = vscode.workspace.workspaceFolders;
   if (workspaceFolders && workspaceFolders.length > 0) {
     return workspaceFolders[0].uri.path;
   } else {
     throw new vscode.FileSystemError('Could not find working folder, open a folder and try again');
   }
+}
+
+export function getBoolean(name: string): boolean {
+  return vscode.workspace.getConfiguration('demojockey').get(name, false);
+}
+
+export function getTargetPath(repo: string): string {
+  const doFlatten: boolean = getBoolean('flatten');
+  // Shared dir for all repos
+  if (doFlatten) {
+    return path.join(getWorkspaceRootPath(), 'proofs');
+  }
+  // Dir per repo
+  return path.join(getWorkspaceRootPath(), repo, 'proofs');
 }
 
 function openThenShowFile(filePath: string): Thenable<vscode.TextEditor> {
@@ -35,7 +49,7 @@ export async function copyDirThenOpenReadme(source: vscode.Uri, target: vscode.U
   const readmeFilename = 'README.md';
   const readmePath = path.join(target.fsPath, readmeFilename);
 
-  const doOverwrite = vscode.workspace.getConfiguration('demojockey').get('overwrite', false);
+  const doOverwrite = getBoolean('overwrite');
 
   return vscode.workspace.fs.copy(source, target, {overwrite: doOverwrite}).then(_ => {
     return openThenShowFile(readmePath);
@@ -51,7 +65,7 @@ function writeThenOpenFile(filePath: string, fileText: string): Thenable<vscode.
 }
 
 export function createThenOpenConnectionString(clusterName: string, connectionString: string): Thenable<vscode.TextEditor> {
-  const connectionStringPath = path.join(workspaceRootPath(), 'clusters', clusterName);
+  const connectionStringPath = path.join(getWorkspaceRootPath(), 'clusters', clusterName);
   return writeThenOpenFile(connectionStringPath, connectionString);
 }
 

@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as WorkspaceUtils from './utils/workspace-utils';
-// import * as Telemetry from './telemetry/realm-telemetry';
 import * as path from 'path';
 
 const repo = 'atlas-google-pov';
@@ -49,13 +48,12 @@ export async function command() {
   const proofsList = (await WorkspaceUtils.listDirs(proofsPath)).map(proofNo => gcpProofDirToFriendlyName(proofNo));
 
   let targetPath;
-  try { 
-    targetPath = path.join(WorkspaceUtils.workspaceRootPath(), repo, proofsDir); 
+  try {
+    targetPath = WorkspaceUtils.getTargetPath(repo);
   } catch (e) {
     WorkspaceUtils.logAndShowError((e as Error).message);
     return;
   }
-
 
   const selectedProof = await vscode.window.showQuickPick(proofsList, {
     placeHolder: 'Select an Atlas Google POV',
@@ -66,7 +64,6 @@ export async function command() {
   const targetProofDir: vscode.Uri = vscode.Uri.parse(path.join(targetPath, selectedProofDir));
 
   if (await WorkspaceUtils.copyDirThenOpenReadme(sourceProofDir, targetProofDir)) {
-    // Telemetry.sendTelemetryEvent('atlas-google-pov', {demo: selectedProof});
     vscode.window.showInformationMessage(`Selected ${selectedProof}`);
   }
 

@@ -58,6 +58,16 @@
           "description": "Overwrite existing project files when copying",
           "type": "boolean",
           "default": false
+        },
+        "demojockey.rename": {
+          "description": "Use friendly names instead of numbered directories (POV Proof Exercises only)",
+          "type": "boolean",
+          "default": false
+        },
+        "demojockey.flatten": {
+          "description": "Copy all proofs, regardless of repo, into flat 'proofs' directory",
+          "type": "boolean",
+          "default": false
         }
       }
     }
