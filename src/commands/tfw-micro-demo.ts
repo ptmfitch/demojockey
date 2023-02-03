@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
-import * as WorkspaceUtils from './utils/workspace-utils';
+import * as WorkspaceUtils from '../utils/workspace-utils';
+import * as config from '../utils/config';
 import * as path from 'path';
+import * as StorageUtils from '../utils/storage-utils';
 
 const repo = 'tfw-micro-demos';
-
-const microDemoPath = WorkspaceUtils.getPathsConfig().get(repo, '');
+const microDemoPath = config.getRepoPath(repo);
 
 export async function command() {
 
@@ -14,23 +15,25 @@ export async function command() {
   }
   const microDemosList = WorkspaceUtils.listDirs(microDemoPath);
 
-  let targetPath;
+  let targetDir;
   try {
-    targetPath = WorkspaceUtils.getTargetPath(repo);
+    targetDir = WorkspaceUtils.getTargetDir(repo);
   } catch (e) {
     WorkspaceUtils.logAndShowError((e as Error).message);
     return;
   }
 
-  const selectedMicroDemo = await vscode.window.showQuickPick(microDemosList, {
+  const selectedProof = await vscode.window.showQuickPick(microDemosList, {
     placeHolder: 'Select a TFW Micro Demo',
   });
-  if (!selectedMicroDemo) { return; }
-  const sourceProofDir: vscode.Uri = vscode.Uri.parse(path.join(microDemoPath, selectedMicroDemo));
-  const targetProofDir: vscode.Uri = vscode.Uri.parse(path.join(targetPath, selectedMicroDemo));
+  if (!selectedProof) { return; }
 
-  if (await WorkspaceUtils.copyDirThenOpenReadme(sourceProofDir, targetProofDir)) {
-    vscode.window.showInformationMessage(`Selected ${selectedMicroDemo}`);
+  const sourcePath: string = path.join(microDemoPath, selectedProof);
+  const targetPath: string = path.join(targetDir, selectedProof);
+
+  if (await WorkspaceUtils.copyDirThenShowReadme(sourcePath, targetPath)) {
+    StorageUtils.updateOneDirectoryMapping(sourcePath, targetPath, WorkspaceUtils.mappingsPath);
+    vscode.window.showInformationMessage(`Selected ${selectedProof}`);
   }
   
 }

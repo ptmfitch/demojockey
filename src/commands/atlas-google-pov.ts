@@ -1,16 +1,17 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as WorkspaceUtils from './utils/workspace-utils';
+import * as WorkspaceUtils from '../utils/workspace-utils';
 import * as path from 'path';
+import * as config from '../utils/config';
+import * as StorageUtils from '../utils/storage-utils';
 
 const repo = 'atlas-google-pov';
   
 const proofsDir = 'proofs';
-const proofsRepo = WorkspaceUtils.getPathsConfig().get(repo, '');
+const proofsRepo = config.getRepoPath(repo);
 const proofsPath = `${proofsRepo}/${proofsDir}`;
 
 const readmePath = `${proofsRepo}/README.md`;
-const readmeText = fs.readFileSync(readmePath, 'utf8');
+const readmeText = StorageUtils.loadDataFromFile(readmePath);
 
 const proofNameRegex = /\[([A-Z-+ ]+)\]\(proofs\/([\w-]+)\)/g;
 const proofNameMatches = Array.from(readmeText.matchAll(proofNameRegex));
@@ -47,9 +48,9 @@ export async function command() {
   }
   const proofsList = (await WorkspaceUtils.listDirs(proofsPath)).map(proofNo => gcpProofDirToFriendlyName(proofNo));
 
-  let targetPath;
+  let targetDir;
   try {
-    targetPath = WorkspaceUtils.getTargetPath(repo);
+    targetDir = WorkspaceUtils.getTargetDir(repo);
   } catch (e) {
     WorkspaceUtils.logAndShowError((e as Error).message);
     return;
@@ -60,10 +61,11 @@ export async function command() {
   });
   if (!selectedProof) { return; }
   const selectedProofDir = friendlyNameToGcpProofDir(selectedProof);
-  const sourceProofDir: vscode.Uri = vscode.Uri.parse(path.join(proofsPath, selectedProofDir));
-  const targetProofDir: vscode.Uri = vscode.Uri.parse(path.join(targetPath, selectedProofDir));
+  const sourcePath: string = path.join(proofsPath, selectedProofDir);
+  const targetPath: string = path.join(targetDir, selectedProofDir);
 
-  if (await WorkspaceUtils.copyDirThenOpenReadme(sourceProofDir, targetProofDir)) {
+  if (await WorkspaceUtils.copyDirThenShowReadme(sourcePath, targetPath)) {
+    StorageUtils.updateOneDirectoryMapping(sourcePath, targetPath, WorkspaceUtils.mappingsPath);
     vscode.window.showInformationMessage(`Selected ${selectedProof}`);
   }
 

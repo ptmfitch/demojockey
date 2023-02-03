@@ -10,13 +10,7 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:demojockey.povProofExercise",
-    "onCommand:demojockey.tfwMicroDemo",
-    "onCommand:demojockey.atlasGooglePov",
-    "onCommand:demojockey.createCluster",
-    "onCommand:demojockey.cloneCluster"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -35,6 +29,12 @@
       {
         "command": "demojockey.tfwMicroDemo",
         "title": "MongoDB TFW Micro Demos",
+        "category": "DemoJockey",
+        "icon": "$(list-selection)"
+      },
+      {
+        "command": "demojockey.applyChanges",
+        "title": "MongoDB Apply Changes",
         "category": "DemoJockey",
         "icon": "$(list-selection)"
       }

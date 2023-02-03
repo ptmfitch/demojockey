@@ -1,16 +1,17 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as WorkspaceUtils from './utils/workspace-utils';
+import * as WorkspaceUtils from '../utils/workspace-utils';
+import * as StorageUtils from '../utils/storage-utils';
+import * as config from '../utils/config';
 import * as path from 'path';
 
 const repo = 'pov-proof-exercises';
 
 const proofsDir = 'proofs';
-const proofsRepo = WorkspaceUtils.getPathsConfig().get(repo, '');
+const proofsRepo = config.getRepoPath(repo);
 const proofsPath = `${proofsRepo}/${proofsDir}`;
 
 const readmePath = `${proofsRepo}/README.md`;
-const readmeText = fs.readFileSync(readmePath, 'utf8');
+const readmeText = StorageUtils.loadDataFromFile(readmePath);
 
 const proofNameRegex = /\[([A-Z-]+)\]\(proofs\/\d{2}\)/g;
 const proofNameMatches = Array.from(readmeText.matchAll(proofNameRegex));
@@ -45,11 +46,9 @@ export async function command() {
   }
   const proofsList = (await WorkspaceUtils.listDirs(proofsPath)).map(proofNo => povProofNoToFriendlyName(proofNo));
 
-  const doRename = WorkspaceUtils.getBoolean('rename');
-
-  let targetPath;
+  let targetDir;
   try {
-    targetPath = WorkspaceUtils.getTargetPath(repo);
+    targetDir = WorkspaceUtils.getTargetDir(repo);
   } catch (e) {
     WorkspaceUtils.logAndShowError((e as Error).message);
     return;
@@ -59,13 +58,13 @@ export async function command() {
     placeHolder: 'Select a POV Proof Exercise',
   });
   if (!selectedProof) { return; }
-  const sourceProofDir: string = friendlyNameToPovProofDir(selectedProof, false);
-  const targetProofDir: string = friendlyNameToPovProofDir(selectedProof, doRename);
-  const sourceProofUri: vscode.Uri = vscode.Uri.parse(path.join(proofsPath, sourceProofDir));
-  const targetProofUri: vscode.Uri = vscode.Uri.parse(path.join(targetPath, targetProofDir));
 
-  if (await WorkspaceUtils.copyDirThenOpenReadme(sourceProofUri, targetProofUri)) {
+  const sourcePath: string = path.join(proofsPath, friendlyNameToPovProofDir(selectedProof, false));
+  const targetPath: string = path.join(targetDir, friendlyNameToPovProofDir(selectedProof, config.doRename()));
+
+  if (await WorkspaceUtils.copyDirThenShowReadme(sourcePath, targetPath)) {
+    StorageUtils.updateOneDirectoryMapping(sourcePath, targetPath, WorkspaceUtils.mappingsPath);
     vscode.window.showInformationMessage(`Selected ${selectedProof}`);
-  };
+  }
 
 }
