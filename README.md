@@ -25,6 +25,8 @@ Adds the 'POV Proof Exercise', 'Atlas Google POV' and 'TFW Micro Demo' commands 
 
 ⌘⇧P 'DemoJockey: TFW Micro Demo': Shortcut to select from a list of TFW Micro Demos to copy into your open VSCode project.
 
+⌘⇧P 'DemoJockey: Apply Changes': Shortcut to copy changes made to a proof back to your local source repository.
+
 ## Release Notes
 
 ### 0.1.0
@@ -41,3 +43,9 @@ Adds the 'POV Proof Exercise', 'Atlas Google POV' and 'TFW Micro Demo' commands 
 - Added MongoDB to command names
 - Added icons to commands
 - Fixed a bug preventing updating configuration without reloading window
+
+### 0.2.0
+
+- Added Apply Changes command to copy changes back to source repo
+- Added .demojockey local config file to track directory mappings
+- Added configuration for renaming and flattening repo structures
